@@ -40,6 +40,7 @@ export const addContactData = async (req, res) => {
       snapChat: content.snapChat,
       googleMap: content.googleMap,
       youtube: content.youtube,
+      tiktok: content.tiktok,
     });
 
     const savedContent = await newContent.save();
