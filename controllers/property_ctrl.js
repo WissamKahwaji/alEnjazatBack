@@ -72,6 +72,7 @@ export const addProperty = async (req, res, next) => {
       paymentPlan,
       floorPlan,
       masterPlan,
+      listingNumber,
     } = req.body;
 
     const imgPath =
@@ -86,11 +87,20 @@ export const addProperty = async (req, res, next) => {
       ? `${process.env.BASE_URL}/${coverImgPath.replace(/\\/g, "/")}`
       : null;
 
+    const qrImgPath =
+      req.files && req.files["qrImg"] ? req.files["qrImg"][0].path : null;
+    const qrImg = qrImgPath
+      ? `${process.env.BASE_URL}/${qrImgPath.replace(/\\/g, "/")}`
+      : null;
     const galleryPaths = req.files["gallery"]
       ? req.files["gallery"].map(
           file => `${process.env.BASE_URL}/${file.path.replace(/\\/g, "/")}`
         )
       : [];
+
+    let qrInfo = {};
+    if (listingNumber) qrInfo.listingNumber = listingNumber;
+    if (qrImg) qrInfo.image = qrImg;
 
     let propertyContentData = {};
     if (propertyContent) {
@@ -125,6 +135,7 @@ export const addProperty = async (req, res, next) => {
       paymentPlan,
       floorPlan,
       masterPlan,
+      qrInfo,
     });
 
     const savedProperty = await newProperty.save();
@@ -145,6 +156,14 @@ export const editProperty = async (req, res, next) => {
     if (req.files && req.files["img"]) {
       const imgPath = req.files["img"][0].path;
       updates.img = `${process.env.BASE_URL}/${imgPath.replace(/\\/g, "/")}`;
+    }
+
+    if (req.files && req.files["qrImg"]) {
+      const imgPath = req.files["qrImg"][0].path;
+      updates.qrInfo.image = `${process.env.BASE_URL}/${imgPath.replace(
+        /\\/g,
+        "/"
+      )}`;
     }
 
     if (req.files && req.files["coverImg"]) {
@@ -177,6 +196,8 @@ export const editProperty = async (req, res, next) => {
       updates.breifDetails = JSON.parse(updates.breifDetails);
     if (updates.connectivity)
       updates.connectivity = JSON.parse(updates.connectivity);
+    if (updates.qrInfo.listingNumber)
+      updates.qrInfo.listingNumber = updates.qrInfo.listingNumber;
 
     const updatedProperty = await propertyModel.findByIdAndUpdate(
       propertyId,

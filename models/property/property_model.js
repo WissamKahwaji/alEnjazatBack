@@ -34,6 +34,10 @@ const propertySchema = new mongoose.Schema({
       value: String,
     },
   ],
+  qrInfo: {
+    image: String,
+    listingNumber: String,
+  },
   locationDetails: String,
   connectivity: [
     {
@@ -41,7 +45,12 @@ const propertySchema = new mongoose.Schema({
       value: String,
     },
   ],
-  paymentPlan: String,
+  paymentPlan: [
+    {
+      title: String,
+      value: String,
+    },
+  ],
   floorPlan: String,
   masterPlan: String,
 });

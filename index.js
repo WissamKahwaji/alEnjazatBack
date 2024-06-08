@@ -65,6 +65,7 @@ app.use(
     { name: "logoImg", maxCount: 1 },
     { name: "mainLogoImg", maxCount: 1 },
     { name: "imgHeading", maxCount: 1 },
+    { name: "qrImg", maxCount: 1 },
   ])
 );
 
