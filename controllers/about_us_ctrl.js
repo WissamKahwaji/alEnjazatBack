@@ -61,27 +61,39 @@ export const editAboutData = async (req, res, next) => {
       ? `${process.env.BASE_URL}/${imgPath.replace(/\\/g, "/")}`
       : null;
 
-    let updatedContent = [];
-    if (content && req.files["contentImgs"]) {
-      updatedContent = JSON.parse(content).map((item, index) => ({
-        ...item,
-        img: `${process.env.BASE_URL}/${req.files["contentImgs"][
-          index
-        ].path.replace(/\\/g, "/")}`,
-      }));
-    } else if (content) {
-      updatedContent = JSON.parse(content);
-    }
+    // let updatedContent = [];
+    // if (content && req.files["contentImgs"]) {
+    //   updatedContent = JSON.parse(content).map((item, index) => ({
+    //     ...item,
+    //     img: `${process.env.BASE_URL}/${req.files["contentImgs"][
+    //       index
+    //     ].path.replace(/\\/g, "/")}`,
+    //   }));
+    // } else if (content) {
+    //   updatedContent = JSON.parse(content);
+    // }
+    // updatedContent = content;
 
     const existingAboutData = await aboutUsModel.findOne();
     if (!existingAboutData) {
       return res.status(404).json({ message: "About Us data not found" });
     }
 
+    if (content && Array.isArray(content)) {
+      existingAboutData.content = await Promise.all(
+        content.map(async (item, index) => {
+          return {
+            title: item.title,
+            description: item.description,
+          };
+        })
+      );
+    }
+
     if (title) existingAboutData.title = title;
     if (imgUrl) existingAboutData.img = imgUrl;
-    if (brief) existingAboutData.brief = JSON.parse(brief);
-    if (updatedContent.length > 0) existingAboutData.content = updatedContent;
+    if (brief) existingAboutData.brief = brief;
+    // if (updatedContent.length > 0) existingAboutData.content = updatedContent;
 
     const savedAboutData = await existingAboutData.save();
     return res.status(200).json(savedAboutData);

@@ -59,6 +59,7 @@ app.use(
     { name: "propertyContentImgs", maxCount: 10 },
     { name: "profile", maxCount: 1 },
     { name: "imgs", maxCount: 15 },
+    { name: "gallery", maxCount: 15 },
     { name: "imgs[1]", maxCount: 15 },
     { name: "imgs[0]", maxCount: 15 },
     { name: "landingImg", maxCount: 1 },

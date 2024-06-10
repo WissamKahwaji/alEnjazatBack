@@ -26,7 +26,7 @@ const propertySchema = new mongoose.Schema({
     mainType: String,
     subType: String,
   },
-  propertyContent: propertyContentSchema.obj,
+  propertyContent: [propertyContentSchema.obj],
   gallery: [String],
   breifDetails: [
     {
