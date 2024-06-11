@@ -224,7 +224,7 @@ export const editProperty = async (req, res, next) => {
         ? req.files[`propertyContentImgs`].map(
             file => `${process.env.BASE_URL}/${file.path.replace(/\\/g, "/")}`
           )
-        : [];
+        : property.propertyContent[index].imgs;
       return {
         ...content,
         imgs: contentImgs,

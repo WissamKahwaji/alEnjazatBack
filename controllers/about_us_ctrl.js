@@ -85,6 +85,7 @@ export const editAboutData = async (req, res, next) => {
           return {
             title: item.title,
             description: item.description,
+            img: existingAboutData.content[index].img,
           };
         })
       );
